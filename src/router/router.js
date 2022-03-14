@@ -10,15 +10,14 @@ import { getLoggedUser, setLoggedUser, getToken, setUserSession, removeUserSessi
 import Login from "../pages/login/Login";
 import Comunas from "../pages/comuna/comunas";
 import NewComuna from "../pages/comuna/newComuna";
+import ListComuna from "../pages/comuna/listComuna";
 import FiltroComuna from "../pages/comuna/filtroComuna";
 import axios from 'axios';
 
 export default function Router() {
-    console.log(`APP Router`);
     const [isLoggedIn, setIsLoggedIn] = useState(
         getLoggedUser() === true
       );
-      console.log(`APP Router ${isLoggedIn}`);
     const [authLoading, setAuthLoading] = useState(true);
 
       useEffect(() => {
@@ -26,7 +25,6 @@ export default function Router() {
       }, [isLoggedIn]);
 
       const logIn = () => {
-        console.log(`APP Router logIn`);
           setIsLoggedIn(true);
           setAuthLoading(false);
         }
@@ -34,7 +32,6 @@ export default function Router() {
         // pass this callback to components you want to allow logging out
         // it will update the local state and then get persisted
         const logOut = () => {
-            console.log(`APP Router logOut`);
             setIsLoggedIn(false);
             removeUserSession()
         };
@@ -70,6 +67,7 @@ export default function Router() {
                         <Route index element={<FiltroComuna />} />
                         <Route path="filtro" element={<FiltroComuna />} />
                         <Route path="new" element={<NewComuna />} />
+                        <Route path="list" element={<ListComuna />} />
                     </Route>
                 <Route
                     path="*"

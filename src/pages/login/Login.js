@@ -5,7 +5,6 @@ import './login.css';
 import { setUserSession } from '../../utils/common';
 
 function Login(props) {
-  console.log(`APP Login`);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState(false);
   const [password, setPassword] = useState(false);

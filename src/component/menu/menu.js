@@ -5,7 +5,6 @@ import './menu.css';
 import { useNavigate } from "react-router-dom";
 
 function App( props ) {
-  console.log(`APP Menu`);
   let navigate = useNavigate();
 
   function handleClick(info) {
