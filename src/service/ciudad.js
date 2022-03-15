@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from '../utils/common'
+import { getToken } from '../session/sessionStorage'
 export const getAll = () => {
   return axios
     .get(`http://localhost:8081/ciudades`,

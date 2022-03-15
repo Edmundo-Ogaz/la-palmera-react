@@ -1,7 +1,7 @@
-import Router from "./router/router";
+import Router from './router/router';
 
 export default function App( props ) {
-  return (
-    <Router/>
-  );
+  	return (
+      	<Router/>
+  	);
 }

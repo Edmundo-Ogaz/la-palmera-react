@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import './login.css';
-import { setUserSession } from '../../utils/common';
+import { setUserSession } from '../../session/sessionStorage';
+import PropTypes from 'prop-types';
 
-function Login(props) {
-  const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState(false);
-  const [password, setPassword] = useState(false);
-  const [error, setError] = useState(null);
+export default function Login(props) {
+  const [ loading, setLoading ] = useState(false);
+  const [ username, setUsername ] = useState(false);
+  const [ password, setPassword ] = useState(false);
+  const [ error, setError ] = useState(null);
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const style = {
-    margin: "15px 0"
+    margin: '15px 0'
   };
 
   const handleLogin = () => {
@@ -23,70 +24,81 @@ function Login(props) {
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.onLogIn();
-      navigate("/");
-    }).catch(error => {
+      navigate('/');
+    }).catch(err => {
       setLoading(false);
-      if (error.response.status === 401) setError(error.response.data.message);
-      else setError("Something went wrong. Please try again later.");
+      if (err.response.status === 401)
+	  	setError(err.response.data.message);
+      else
+	  	setError('Something went wrong. Please try again later.');
     });
   };
 
     return (
-      <div className="login-container">
-        <div className="title">
-         Login
+        <div className="login-container">
+            <div className="title">
+                Login
+            </div>
+            <FluidInput type="text" label="name" id="name" style={ style } onChange={ setUsername } />
+            <FluidInput type="password" label="password" id="password" style={ style } onChange={ setPassword } />
+            {error && <><small style={ { color: 'red' } }>{error}</small><br /></>}<br />
+            <div className={ 'button login-button' } onClick={ handleLogin } disabled={ loading }>
+                {loading ? 'Loading...' : 'Log in'}
+            </div>
         </div>
-        <FluidInput type="text" label="name" id="name" style={style} onChange={setUsername} />
-        <FluidInput type="password" label="password" id="password" style={style} onChange={setPassword} />
-        {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
-        <div className={`button login-button`} onClick={handleLogin} disabled={loading}>
-          {loading ? 'Loading...' : 'Log in'}
-        </div>
-      </div>
     );
   }
 
-  function FluidInput(props) {
-    const [focused, setFocused] = React.useState(false);
-    const [value, setValue] = React.useState("");
-  
-      const { type, label, style, id, onChange } = props;
-  
-      function focusField() {
-        // console.log(`focusField ${focused}`);
-        setFocused(!focused);
-      }
-  
+function FluidInput(props) {
+	const { type, label, style, id, onChange } = props;
+
+	const [ focused, setFocused ] = React.useState(false);
+    const [ value, setValue ] = React.useState('');
+
+	function focusField() {
+		// console.log(`focusField ${focused}`);
+		setFocused(!focused);
+	}
+
       function handleChange(event) {
         const { target } = event;
-        const { value } = target;
-        // console.log(`handleChange ${value}`);
-        setValue(value);
-        onChange(value)
+        setValue(target.value);
+        onChange(target.value)
       }
-  
-      let inputClass = "fluid-input";
+
+      let inputClass = 'fluid-input';
       if (focused) {
-        inputClass += " fluid-input--focus";
-      } else if (value !== "") {
-        inputClass += " fluid-input--open";
+        inputClass += ' fluid-input--focus';
+      } else if (value !== '') {
+        inputClass += ' fluid-input--open';
       }
       return (
-        <div className={inputClass} style={style}>
-          <div className="fluid-input-holder">
-            <input
+          <div className={ inputClass } style={ style }>
+              <div className="fluid-input-holder">
+                  <input
               className="fluid-input-input"
-              type={type}
-              id={id}
-              onFocus={focusField.bind(this)}
-              onBlur={focusField.bind(this)}
-              onChange={handleChange.bind(this)}
+              type={ type }
+              id={ id }
+              onFocus={ focusField.bind(this) }
+              onBlur={ focusField.bind(this) }
+              onChange={ handleChange.bind(this) }
               autoComplete="off"
             />
-            <label className="fluid-input-label" forhtml={id}>{label}</label>
+                  <label className="fluid-input-label" forhtml={ id }>{label}</label>
+              </div>
           </div>
-        </div>
       );
     }
 
-export default Login;
+    Login.propTypes = {
+		onLogIn: PropTypes.func,
+      	onLogOut: PropTypes.func
+    }
+
+	FluidInput.propTypes = {
+		type: PropTypes.string,
+		label: PropTypes.string,
+		style: PropTypes.object,
+		id: PropTypes.string,
+		onChange: PropTypes.func,
+    }

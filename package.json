@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.5.1",
+    "@mui/x-data-grid": "^5.6.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -26,7 +30,33 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "space-in-parens": [ 0, "always" ],
+      "template-curly-spacing": [ 2, "always" ],
+      "array-bracket-spacing": [ 2, "always" ],
+      "object-curly-spacing": [ 2, "always" ],
+      "computed-property-spacing": [ 2, "always" ],
+      "no-multiple-empty-lines": [ 2, { "max": 1, "maxEOF": 0, "maxBOF": 0 } ],
+      "quotes": [ 1, "single", "avoid-escape" ],
+      "no-use-before-define": [ 2, { "functions": false } ],
+      "semi": [0, "never"],
+      "prefer-const": 1,
+      "react/prefer-es6-class": 0,
+      "react/jsx-filename-extension": 0,
+      "react/jsx-curly-spacing": [ 2, "always" ],
+      "react/jsx-indent": [ 2, 4 ],
+      "react/prop-types": [ 1 ],
+      "react/no-array-index-key": [ 1 ],
+      "class-methods-use-this": [ 1 ],
+      "no-undef": [ 1 ],
+      "no-case-declarations": [ 1 ],
+      "no-return-assign": [ 1 ],
+      "no-param-reassign": [ 1 ],
+      "no-shadow": [ 1 ],
+      "camelcase": [ 1 ],
+      "no-underscore-dangle" : [0, "always"]
+    }
   },
   "browserslist": {
     "production": [
