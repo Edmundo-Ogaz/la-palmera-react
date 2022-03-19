@@ -4,7 +4,8 @@ import 'rc-menu/assets/index.css';
 import './menu.css';
 import { useNavigate } from 'react-router-dom';
 
-function App( props ) {
+export default function App( props ) {
+	console.log('Menu')
   const navigate = useNavigate();
 
   function handleClick(info) {
@@ -110,5 +111,3 @@ App.propTypes = {
   updateChildrenAndOverflowedIndicator: PropTypes.bool,
   onLogOut: PropTypes.func
 };
-
-export default App;

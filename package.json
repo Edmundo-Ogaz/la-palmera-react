@@ -33,7 +33,7 @@
     ],
     "rules": {
       "space-in-parens": [ 0, "always" ],
-      "template-curly-spacing": [ 2, "always" ],
+      "template-curly-spacing": [ 2, "never" ],
       "array-bracket-spacing": [ 2, "always" ],
       "object-curly-spacing": [ 2, "always" ],
       "computed-property-spacing": [ 2, "always" ],
@@ -45,7 +45,7 @@
       "react/prefer-es6-class": 0,
       "react/jsx-filename-extension": 0,
       "react/jsx-curly-spacing": [ 2, "always" ],
-      "react/jsx-indent": [ 2, 4 ],
+      "react/jsx-indent": [ 2, 4, {"checkAttributes": true} ],
       "react/prop-types": [ 1 ],
       "react/no-array-index-key": [ 1 ],
       "class-methods-use-this": [ 1 ],

@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import './login.css';
 import { setUserSession } from '../../session/sessionStorage';
 import PropTypes from 'prop-types';
+import { signin } from '../../service/signin'
 
 export default function Login(props) {
+	console.log('Login')
   const [ loading, setLoading ] = useState(false);
   const [ username, setUsername ] = useState(false);
   const [ password, setPassword ] = useState(false);
@@ -20,7 +22,8 @@ export default function Login(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('http://localhost:8081/api/services/controller/user/login', { username: username, password: password }).then(response => {
+    signin(username, password)
+    .then(response => {
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.onLogIn();
