@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Login from '../pages/login/Login';
-import Dashboard from '../Dashboard';
+import Login from './pages/login/Login';
 
-import PrivateRoute from '../Utils/PrivateRoute';
-import PublicRoute from '../Utils/PublicRoute';
+import PrivateRoute from './utils/PrivateRoute';
+import PublicRoute from './utils/PublicRoute';
 
-import { getToken, removeUserSession, setUserSession } from '../Utils/Common';
+import { getToken, removeUserSession, setUserSession } from './service/sessionStorage';
 
-import Comunas from '../pages/comuna/comunas';
-import NewComuna from '../pages/comuna/newComuna';
-import ListComuna from '../pages/comuna/listComuna';
-import FiltroComuna from '../pages/comuna/filtroComuna';
-import ModifyComuna from '../pages/comuna/modifyComuna';
+import Comunas from './component/comuna/comunas';
+import NewComuna from './component/comuna/newComuna';
+import ListComuna from './component/comuna/listComuna';
+import FiltroComuna from './component/comuna/filtroComuna';
+import ModifyComuna from './component/comuna/modifyComuna';
 
-import { verifyToken } from '../service/token'
+import { verifyToken } from './service/token'
 
 export default function Router() {
 	console.log('Router')
@@ -56,9 +55,6 @@ export default function Router() {
                     <Route path="list" element={ <ListComuna /> } />
                     <Route path="modify" element={ <ModifyComuna /> } />
                 </Route>
-            </Route>
-            <Route path="/dashboard" element={ <PrivateRoute /> } >
-                <Route index element={ <Dashboard /> }/>
             </Route>
             <Route path="*"	element={ 
                 <main style={ { padding: '1rem' } }>

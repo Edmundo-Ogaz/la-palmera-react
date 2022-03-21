@@ -1,4 +1,4 @@
-import Router from './router/router';
+import Router from './router';
 
 export default function App( props ) {
 	console.log('App')

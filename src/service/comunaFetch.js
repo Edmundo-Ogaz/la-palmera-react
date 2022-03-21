@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { getToken } from '../session/sessionStorage'
+import { getToken } from '../service/sessionStorage'
 
 export const saveSync = async (code = '', name = '', cityCode = '') => {
 	console.log(`saveSync fetch ${code} ${name} ${cityCode}`);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import { setUserSession } from '../../Utils/Common';
+import { setUserSession } from '../../service/sessionStorage';
 import PropTypes from 'prop-types';
 import { signin } from '../../service/signin'
 
@@ -15,7 +15,7 @@ export default function Login(props) {
 	const navigate = useNavigate();
 
 	const style = {
-		margin: '15px 0'
+		margin: '15px auto'
 	};
 
 	const handleLogin = () => {

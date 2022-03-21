@@ -1,20 +1,35 @@
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+
 import Menu, { SubMenu, Item as MenuItem } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import './menu.css';
-import { useNavigate } from 'react-router-dom';
+
+import { removeUserSession } from '../../service/sessionStorage'
 
 export default function App( props ) {
 	console.log('Menu')
+  
   const navigate = useNavigate();
 
   function handleClick(info) {
     // console.log(`clicked ${info.key}`);
     // console.log(info);
     // console.log(info.item.props.children)
-
-    if ( info.key === '4-2' ) props.onLogOut();
-    navigate('/comunas');
+ 
+    switch (info.key) {
+      case '1-1':
+        navigate('/comunas')
+        break;
+      case '4-2':
+        removeUserSession()
+        navigate('/login')
+        break;
+    
+      default:
+        break;
+    }
   }
 
   function onOpenChange(value) {

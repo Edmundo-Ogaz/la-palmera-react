@@ -1,4 +1,4 @@
-import axios from '../tools/customAxios';
+import axios from '../utils/customAxios';
 
 export const getAll = () => {
   return axios

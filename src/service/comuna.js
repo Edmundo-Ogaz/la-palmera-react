@@ -1,4 +1,4 @@
-import axios from '../tools/customAxios';
+import axios from '../utils/customAxios';
 import { comunasAdapter, comunaAdapter } from '../model/comunaModel'
 
 export const getAll = () => {

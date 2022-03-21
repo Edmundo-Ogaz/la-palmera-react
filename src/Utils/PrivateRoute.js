@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-import Dashboard from '../Dashboard';
+import Dashboard from '../pages/Dashboard';
 
-import { getToken } from './Common';
+import { getToken } from '../service/sessionStorage';
 
 function PrivateRoute() {
   console.log('PrivateRoute')

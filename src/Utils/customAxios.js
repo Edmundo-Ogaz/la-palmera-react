@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { getToken } from '../Utils/Common'
+import { getToken } from '../service/sessionStorage'
 import { verifyToken } from '../service/token'
 // const axios = require('axios');
 
