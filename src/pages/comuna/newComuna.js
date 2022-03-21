@@ -1,26 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
-import { getAll as comunaGetAll } from '../../service/comuna';
 import { getAll as ciudadGetAll } from '../../service/ciudad';
-import { verifyToken } from '../../service/token'
-import { removeUserSession } from '../../session/sessionStorage'
 import { save } from '../../service/comuna'
 
 export default function NewComuna() {
 	console.log('NewComuna')
+	
 	const [ ciudades, setCiudades ] = useState([])
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		verifyToken()
-		.then(() => {
-			ciudadGetAll().then(response => setCiudades(response.data));
-		})
-		.catch(() => {
-			removeUserSession()
-			navigate('/login');
-		})
+		ciudadGetAll().then(response => setCiudades(response.data));
 	}, [])
 
 	const customChange = (e, setFieldValue) => {

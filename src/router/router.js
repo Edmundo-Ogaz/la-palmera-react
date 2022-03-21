@@ -1,80 +1,72 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard';
-import { getLoggedUser, setLoggedUser, getToken, setUserSession, removeUserSession } from '../session/sessionStorage';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Login from '../pages/login/Login';
+import Dashboard from '../Dashboard';
+
+import PrivateRoute from '../Utils/PrivateRoute';
+import PublicRoute from '../Utils/PublicRoute';
+
+import { getToken, removeUserSession, setUserSession } from '../Utils/Common';
+
 import Comunas from '../pages/comuna/comunas';
 import NewComuna from '../pages/comuna/newComuna';
 import ListComuna from '../pages/comuna/listComuna';
 import FiltroComuna from '../pages/comuna/filtroComuna';
 import ModifyComuna from '../pages/comuna/modifyComuna';
-import axios from 'axios';
-import { verifyToken } from '../service/token' 
+
+import { verifyToken } from '../service/token'
 
 export default function Router() {
 	console.log('Router')
-    const [ isLoggedIn, setIsLoggedIn ] = useState(
-        getLoggedUser() === true
-      );
-    const [ authLoading, setAuthLoading ] = useState(true);
+	
+	const [ authLoading, setAuthLoading ] = useState(true);
 
-      useEffect(() => {
-        setLoggedUser(isLoggedIn)
-      }, [ isLoggedIn ]);
+	useEffect(() => {
+		const token = getToken();
+		if (!token) {
+			return;
+		}
 
-      const logIn = () => {
-          setIsLoggedIn(true);
-          setAuthLoading(false);
-        }
+		verifyToken(token)
+		.then(response => {
+			setUserSession(response.token, response.user);
+			setAuthLoading(false);
+		}).catch(error => {
+			removeUserSession();
+			setAuthLoading(false);
+		});
+	}, []);
 
-        const logOut = () => {
-            setIsLoggedIn(false);
-            removeUserSession()
-        };
+	if (authLoading && getToken()) {
+		return <div className="content">Checking Authentication...</div>
+	}
 
-  useEffect(() => {
-    const token = getToken();
-    if (!token) {
-      return;
-    }
-
-    verifyToken()
-    .then(response => {
-      setUserSession(response.data.token, response.data.user);
-      setAuthLoading(false);
-    }).catch(error => {
-      removeUserSession();
-      setAuthLoading(false);
-      setIsLoggedIn(false)
-    });
-  }, []);
-
-  if (authLoading && getToken()) {
-    return <div className="content">Checking Authentication...</div>
-  }
-
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={ <Login onLogIn={ logIn } /> } />
-                <Route path="/" element={ isLoggedIn ? <Dashboard onLogOut={ logOut } /> : <Navigate to='/login'/> }>
-                    <Route path="comunas" element={ <Comunas /> }>
-                        <Route index element={ <FiltroComuna /> } />
-                        <Route path="filtro" element={ <FiltroComuna /> } />
-                        <Route path="new" element={ <NewComuna /> } />
-                        <Route path="list" element={ <ListComuna /> } />
-                        <Route path="modify" element={ <ModifyComuna /> } />
-                    </Route>
-                    <Route
-                    path="*"
-                    element={
-                        <main style={ { padding: '1rem' } }>
-                            <p>There's nothing here!</p>
-                        </main>
-                    }
-                />
+	return (
+    <BrowserRouter>
+        <Routes>
+            <Route exact path="/login" element={ <PublicRoute /> } >
+                <Route index element={ <Login /> } />
+            </Route>
+            <Route path="/" element={ <PrivateRoute /> } >
+                <Route path="comunas" element={ <Comunas /> } >
+                    <Route index element={ <FiltroComuna /> } />
+                    <Route path="filtro" element={ <FiltroComuna /> } />
+                    <Route path="new" element={ <NewComuna /> } />
+                    <Route path="list" element={ <ListComuna /> } />
+                    <Route path="modify" element={ <ModifyComuna /> } />
                 </Route>
-            </Routes>
-        </BrowserRouter>
-    );
+            </Route>
+            <Route path="/dashboard" element={ <PrivateRoute /> } >
+                <Route index element={ <Dashboard /> }/>
+            </Route>
+            <Route path="*"	element={ 
+                <main style={ { padding: '1rem' } }>
+                    <p>There's nothing here!</p>
+                </main>
+				}
+				/>
+        </Routes>
+    </BrowserRouter>
+	);
 }

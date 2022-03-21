@@ -104,10 +104,10 @@ export default function App( props ) {
 }
 
 App.propTypes = {
-  mode: PropTypes.string,
-  openAnimation: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
-  triggerSubMenuAction: PropTypes.string,
-  defaultOpenKeys: PropTypes.arrayOf(PropTypes.string),
-  updateChildrenAndOverflowedIndicator: PropTypes.bool,
-  onLogOut: PropTypes.func
+	mode: PropTypes.string,
+	openAnimation: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
+	triggerSubMenuAction: PropTypes.string,
+	defaultOpenKeys: PropTypes.arrayOf(PropTypes.string),
+	updateChildrenAndOverflowedIndicator: PropTypes.bool,
+	onLogOut: PropTypes.func
 };

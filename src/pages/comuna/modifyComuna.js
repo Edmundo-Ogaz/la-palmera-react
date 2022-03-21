@@ -1,33 +1,23 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
-import { getAll as comunaGetAll, update } from '../../service/comuna';
+import { update } from '../../service/comuna'
 import { getAll as ciudadGetAll } from '../../service/ciudad';
-import { verifyToken } from '../../service/token'
-import { removeUserSession } from '../../session/sessionStorage'
 
 export default function ModifyComuna() {
 	console.log('ModifyComuna')
-  const [ comunas, setComunas ] = useState([])
-  const [ ciudades, setCiudades ] = useState([])
-  const { state } = useLocation();
-  const navigate = useNavigate();
+	
+	const [ ciudades, setCiudades ] = useState([])
+	const { state } = useLocation();
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    // verifyToken()
-    // .then(() => {
-    //   comunaGetAll().then(response => setComunas(response.data));
-      ciudadGetAll().then(response => setCiudades(response.data));
-    // })
-    // .catch(() => {
-    //   removeUserSession()
-    //   navigate('/login');
-    // })
-  }, [])
+	useEffect(() => {
+		ciudadGetAll().then(response => setCiudades(response.data));
+	}, [])
 
-const customChange = (e, setFieldValue) => {
-    setFieldValue(e.target.name, e.target.value);
-  };
+	const customChange = (e, setFieldValue) => {
+		setFieldValue(e.target.name, e.target.value);
+	};
 
   	return (
       	<main style={ { padding: '1rem' } }>

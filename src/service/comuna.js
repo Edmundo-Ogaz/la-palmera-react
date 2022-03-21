@@ -1,19 +1,16 @@
-import axios from 'axios';
-import { getToken } from '../session/sessionStorage'
+import axios from '../tools/customAxios';
 import { comunasAdapter, comunaAdapter } from '../model/comunaModel'
+
 export const getAll = () => {
   return axios
-    .get('http://localhost:8081/comunas',
-      { headers : { 'Authorization' : `Bearer ${getToken()} ` } }
+    .get('/comunas'
     )
 };
 
 export const search = async (comuna = '', ciudad = '') => {
 	try {
 		const response = await axios.get(
-			`http://localhost:8081/comunas/search?comuna=${comuna}&ciudad=${ciudad}`,
-			{ headers : { 'Authorization' : `Bearer ${getToken()} ` } }
-		)
+			`/comunas/search?comuna=${comuna}&ciudad=${ciudad}`)
 		return comunasAdapter(response.data)
 	} catch (error) {
 		throw error
@@ -23,10 +20,8 @@ export const search = async (comuna = '', ciudad = '') => {
 export const save = async (code = '', name = '', cityCode = '') => {
 	console.log(`saveSync ${code} ${name} ${cityCode}`);
 	try {
-	  	const response = await axios.post('http://localhost:8081/comunas', 
-			{ code: code, name: name, cityCode: cityCode },
-			{ headers : { 'Authorization' : `Bearer ${getToken()} ` } }
-		)
+	  	const response = await axios.post('/comunas', 
+			{ code: code, name: name, cityCode: cityCode })
 	  	return comunaAdapter(response.data)
 	} catch (error) {
 		console.error(error);
@@ -36,10 +31,8 @@ export const save = async (code = '', name = '', cityCode = '') => {
 
 export const update = async (code = '', name = '', cityCode = '') => {
 	try {
-		const response = await axios.put('http://localhost:8081/comunas', 
-			{ code: code, name: name, cityCode: cityCode },
-			{ headers : { 'Authorization' : `Bearer ${getToken()} ` } }
-		)
+		const response = await axios.put('/comunas', 
+			{ code: code, name: name, cityCode: cityCode })
 		return comunaAdapter(response.data)
 	} catch (error) {
 	  	console.error(error);
@@ -50,7 +43,5 @@ export const update = async (code = '', name = '', cityCode = '') => {
 export const remove = (code) => {
 	console.log(`remove code ${code}`)
 	return axios
-	  .delete(`http://localhost:8081/comunas/${code}`,
-		{ headers : { 'Authorization' : `Bearer ${getToken()} ` } }
-	)
+	  .delete(`/comunas/${code}`)
 };

@@ -1,27 +1,22 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
+
 import { getAll as comunaGetAll, search as comunaSearch } from '../../service/comuna';
 import { getAll as ciudadGetAll } from '../../service/ciudad';
-import { verifyToken } from '../../service/token'
-import { removeUserSession } from '../../session/sessionStorage'
 
 export default function FiltroComuna() {
 	console.log('FiltroComuna')
-	const [ comunas, setComunas ] = useState([])
-	const [ ciudades, setCiudades ] = useState([])
-	const navigate = useNavigate();
 
-	useEffect(() => {
-		verifyToken()
-		.then(() => {
-			comunaGetAll().then(response => setComunas(response.data));
-			ciudadGetAll().then(response => setCiudades(response.data));
-		})
-		.catch(() => {
-			removeUserSession()
-			navigate('/login');
-		})
+    const [ comunas, setComunas ] = useState([])
+	const [ ciudades, setCiudades ] = useState([])
+	
+	const navigate = useNavigate();
+    
+    useEffect(() => {
+		comunaGetAll().then(response => setComunas(response.data));
+		ciudadGetAll().then(response => setCiudades(response.data));
 	}, [])
 
     return (

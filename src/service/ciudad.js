@@ -1,8 +1,6 @@
-import axios from 'axios';
-import { getToken } from '../session/sessionStorage'
+import axios from '../tools/customAxios';
+
 export const getAll = () => {
   return axios
-    .get('http://localhost:8081/ciudades',
-      { headers : { 'Authorization' : `Bearer ${getToken()} ` } }
-    )
+    .get('/ciudades')
 };

@@ -26,7 +26,7 @@ export const getUser = () => {
   export const getLoggedUser = () => {
     const userStr = sessionStorage.getItem('logged_user');
     if (userStr) return JSON.parse(userStr);
-    else return null;
+    else return false;
   }
 
   export const setLoggedUser = (isLogged) => {

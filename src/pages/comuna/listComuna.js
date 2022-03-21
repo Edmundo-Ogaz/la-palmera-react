@@ -1,23 +1,25 @@
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+
 import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react';
+
 import { remove } from '../../service/comuna'
 
 const columns = [
-  { field: 'code', headerName: 'Código', width: 130 },
-  { field: 'name', headerName: 'Nombre', width: 130 },
-  { field: 'cityCode', headerName: 'Ciudad', width: 130 },
-];
+	{ field: 'code', headerName: 'Código', width: 130 },
+	{ field: 'name', headerName: 'Nombre', width: 130 },
+	{ field: 'cityCode', headerName: 'Ciudad', width: 130 },
+  ];
 
 export default function ListComuna() {
 	console.log('ListComuna')
+
 	const navigate = useNavigate()
 	const { state } = useLocation()
 	const [ selectionModel, setSelectionModel ] = useState([])
-
-	const rows = state.map((comuna, index) => {
+	const [ rows, setRows ] = useState(state.map((comuna, index) => {
 		return { id: index, code: comuna.code, name: comuna.name, cityCode: comuna.cityCode }
-	});
+	}))
 
 	const handleSelection = (selection) => {
 		if (selection.length > 1) {
@@ -39,19 +41,20 @@ export default function ListComuna() {
 					pageSize={ 5 }
 					rowsPerPageOptions={ [ 5 ] }
 					checkboxSelection
+					disableSelectionOnClick
 					hideFooterSelectedRowCount
 					onSelectionModelChange={ handleSelection }
 					selectionModel={ selectionModel }
 				/>
           	</div>
           	<button
-			onClick={ () => {
-				navigate('/comunas/new')
-			} }
-			>
-              Nueva Comuna
+				onClick={ () => {
+					navigate('/comunas/new')
+				} }
+				>
+              	Nueva Comuna
           	</button>
-          <button
+          	<button
 				onClick={ () => {
 					const selected = rows.find((row) => row.id === selectionModel[ 0 ])
 					navigate('/comunas/modify', { state: selected })
@@ -64,19 +67,19 @@ export default function ListComuna() {
 					const selected = rows.find((row) => row.id === selectionModel[ 0 ])
 					remove(selected.code)
 					.then(() => {
-						const newRows = rows.filter((row) => row.id !== selectionModel[ 0 ])
-						navigate('/comunas/list', { state: newRows })
+						setSelectionModel([])
+						setRows(rows.filter((row) => row.code !== selected.code))
 					})
 				} }
 				>
               Eliminar
           	</button>
-          <button
+          	<button
 				onClick={ () => {
 					navigate('/comunas/filtro')
 				} }
 				>
-              Volver
+              	Volver
           	</button>
       	</main>
   	);
