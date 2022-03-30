@@ -1,15 +1,21 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
-import { update } from '../../service/comuna'
+
+import { useDispatch } from 'react-redux'
+import { modify as modifyStore } from '../../store/comunaReducer'
+
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+
+import PropTypes from 'prop-types';
+
 import { getAll as ciudadGetAll } from '../../service/ciudad';
 
-export default function ModifyComuna() {
+export default function ModifyComuna(props) {
 	console.log('ModifyComuna')
-	
+
+	const { comuna } = props
 	const [ ciudades, setCiudades ] = useState([])
-	const { state } = useLocation();
-	const navigate = useNavigate();
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		ciudadGetAll().then(response => setCiudades(response.data));
@@ -23,7 +29,7 @@ export default function ModifyComuna() {
       	<main style={ { padding: '1rem' } }>
           <h2>Modificar Comuna</h2>
           	<Formik
-				initialValues={ { code: state.code, name: state.name, cityCode: state.cityCode } }
+				initialValues={ { code: comuna.code, name: comuna.name, codeCity: comuna.codeCity } }
 				validate={ values => {
 					const errors = {};
 					if (!values.code) {
@@ -32,14 +38,15 @@ export default function ModifyComuna() {
 					if (!values.name) {
 						errors.name = 'Required';
 					}
-					if (!values.cityCode) {
-						errors.cityCode = 'Required';
+					if (!values.codeCity) {
+						errors.codeCity = 'Required';
 					}
 					return errors;
 				} }
 				onSubmit={ (values, actions) => {
-					update(values.code, values.name, values.cityCode)
-					.then(response => navigate('/comunas/list', { state: [ response ] } ))
+					dispatch(
+						modifyStore(values.code, values.name, values.codeCity)
+					).then(() => props.onClose())
 				} }
 				onChange={ (values, actions) => {
 					console.log('On Change');
@@ -54,23 +61,30 @@ export default function ModifyComuna() {
 							onChange={ e => customChange(e, setFieldValue) }
 							disabled={ true }
 						/>
+                      <ErrorMessage name="code" component="div" />
                       <Field
 							type="name"
 							name="name"
 							placeholder="Nombre"
 							onChange={ e => customChange(e, setFieldValue) }
 					  />
-                      <Field as="select" name="cityCode">
+                      <ErrorMessage name="name" component="div" />
+                      <Field as="select" name="codeCity">
                           <option value="">TODOS</option>
                           {ciudades.map(ciudad =>
                               <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
 							)}
                       </Field>
-                      <ErrorMessage name="ciudad" component="div" />
+                      <ErrorMessage name="codeCity" component="div" />
                       <button type="submit">Submit</button>
                   </Form>
         		)}
           	</Formik>
       	</main>
   	);
+}
+
+ModifyComuna.propTypes = {
+	comuna: PropTypes.object,
+	onClose: PropTypes.func
 }

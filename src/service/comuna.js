@@ -1,5 +1,5 @@
 import axios from '../utils/customAxios';
-import { comunasAdapter, comunaAdapter } from '../model/comunaModel'
+import { comunasAdapter, comunaAdapter, comunaAdapterToApi } from '../model/comunaModel'
 
 export const getAll = () => {
   return axios
@@ -17,11 +17,11 @@ export const search = async (comuna = '', ciudad = '') => {
 	}
 };
 
-export const save = async (code = '', name = '', cityCode = '') => {
-	console.log(`saveSync ${code} ${name} ${cityCode}`);
+export const save = async (code = '', name = '', codeCity = '') => {
+	console.log(`saveSync ${code} ${name} ${codeCity}`);
 	try {
 	  	const response = await axios.post('/comunas', 
-			{ code: code, name: name, cityCode: cityCode })
+		  comunaAdapterToApi({ code, name, codeCity }))
 	  	return comunaAdapter(response.data)
 	} catch (error) {
 		console.error(error);
@@ -29,10 +29,11 @@ export const save = async (code = '', name = '', cityCode = '') => {
 	}
   }
 
-export const update = async (code = '', name = '', cityCode = '') => {
+export const update = async (code = '', name = '', codeCity = '') => {
+	console.log('update service')
 	try {
 		const response = await axios.put('/comunas', 
-			{ code: code, name: name, cityCode: cityCode })
+			comunaAdapterToApi({ code, name, codeCity }))
 		return comunaAdapter(response.data)
 	} catch (error) {
 	  	console.error(error);

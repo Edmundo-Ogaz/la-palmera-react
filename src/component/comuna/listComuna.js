@@ -8,7 +8,7 @@ import { remove } from '../../service/comuna'
 const columns = [
 	{ field: 'code', headerName: 'Código', width: 130 },
 	{ field: 'name', headerName: 'Nombre', width: 130 },
-	{ field: 'cityCode', headerName: 'Ciudad', width: 130 },
+	{ field: 'codeCity', headerName: 'Ciudad', width: 130 },
   ];
 
 export default function ListComuna() {
@@ -18,7 +18,7 @@ export default function ListComuna() {
 	const { state } = useLocation()
 	const [ selectionModel, setSelectionModel ] = useState([])
 	const [ rows, setRows ] = useState(state.map((comuna, index) => {
-		return { id: index, code: comuna.code, name: comuna.name, cityCode: comuna.cityCode }
+		return { id: index, code: comuna.code, name: comuna.name, codeCity: comuna.codeCity }
 	}))
 
 	const handleSelection = (selection) => {

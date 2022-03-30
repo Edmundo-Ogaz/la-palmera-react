@@ -1,14 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
-import { getAll as ciudadGetAll } from '../../service/ciudad';
-import { save } from '../../service/comuna'
 
-export default function NewComuna() {
+import { useDispatch } from 'react-redux';
+import { save as saveComuna } from '../../store/comunaReducer'
+
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+
+import PropTypes from 'prop-types';
+
+import { getAll as ciudadGetAll } from '../../service/ciudad';
+
+export default function NewComuna(props) {
 	console.log('NewComuna')
 	
 	const [ ciudades, setCiudades ] = useState([])
-	const navigate = useNavigate();
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		ciudadGetAll().then(response => setCiudades(response.data));
@@ -37,8 +43,10 @@ export default function NewComuna() {
 					return errors;
 				} }
 				onSubmit={ (values, { setSubmitting }) => {
-					save(values.code, values.name, values.cityCode)
-					.then(response => navigate('/comunas/list', { state: [ response ] } ))
+					dispatch(
+						saveComuna(values.code, values.name, values.cityCode)
+					)
+					.then(() => props.onClose())
 				} }
 			>
             {({ setFieldValue, isSubmitting }) => (
@@ -69,20 +77,10 @@ export default function NewComuna() {
                 </Form>
 				)}
         </Formik>
-        <button
-				onClick={ () => {
-					navigate('/comunas/list');
-				} }
-			>
-            Lista
-        </button>
-        <button
-				onClick={ () => {
-					navigate('/comunas/filtro');
-				} }
-			>
-            Filtro
-        </button>
     </main>
 	);
+}
+
+NewComuna.propTypes = {
+	onClose: PropTypes.func
 }
