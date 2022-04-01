@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { getToken } from '../service/sessionStorage'
-import { verifyToken } from '../service/token'
+import { getToken } from '../services/sessionStorage'
+import { verifyToken } from '../services/tokenService'
 // const axios = require('axios');
 
 // Step-1: Create a new Axios instance with a custom config.

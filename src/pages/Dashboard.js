@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import Menu from '../component/menu/menu';
+import Menu from '../components/menu/menu';
 import PropTypes from 'prop-types';
 
 export default function Dashboard( props ) {

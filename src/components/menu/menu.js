@@ -6,7 +6,7 @@ import Menu, { SubMenu, Item as MenuItem } from 'rc-menu';
 import 'rc-menu/assets/index.css';
 import './menu.css';
 
-import { removeUserSession } from '../../service/sessionStorage'
+import { removeUserSession } from '../../services/sessionStorage'
 
 export default function App( props ) {
 	console.log('Menu')

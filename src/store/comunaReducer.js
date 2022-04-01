@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { search as searchComuna, save as saveComuna, update as updateComuna, remove as removeComuna } from '../service/comuna'
+import { search as searchComuna, save as saveComuna, update as updateComuna, remove as removeComuna } from '../services/comunaService'
 
 const initialState = {
   list: [],

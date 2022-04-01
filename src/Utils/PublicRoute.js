@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { getToken } from '../service/sessionStorage';
+import { getToken } from '../services/sessionStorage';
 
 // handle the public routes
 function PublicRoute() {

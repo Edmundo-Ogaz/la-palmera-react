@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import { setUserSession } from '../../service/sessionStorage';
+import { setUserSession } from '../../services/sessionStorage';
 import PropTypes from 'prop-types';
-import { signin } from '../../service/signin'
+import { signin } from '../../services/signinService'
 
 export default function Login(props) {
 	console.log('Login')

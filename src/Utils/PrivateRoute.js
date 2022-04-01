@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 import Dashboard from '../pages/Dashboard';
 
-import { getToken } from '../service/sessionStorage';
+import { getToken } from '../services/sessionStorage';
 
 function PrivateRoute() {
   console.log('PrivateRoute')

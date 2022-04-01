@@ -7,13 +7,14 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { DataGrid } from '@mui/x-data-grid';
 
-import Modal from '../../component/modal'
+import Modal from '../../components/modal'
+import Dialog from '../../components/dialog'
 
 import NewComuna from './newComuna'
 import ModifyComuna from './modifyComuna'
 
-import { getAll as comunaGetAll } from '../../service/comuna';
-import { getAll as ciudadGetAll } from '../../service/ciudad';
+import { getAll as comunaGetAll } from '../../services/comunaService';
+import { getAll as ciudadGetAll } from '../../services/ciudadService';
 
 const columns = [
 	{ field: 'code', headerName: 'Código', width: 130 },
@@ -21,17 +22,20 @@ const columns = [
 	{ field: 'codeCity', headerName: 'Ciudad', width: 130 },
 ];
 
-export default function FiltroComuna() {
-	console.log('FiltroComuna')
-
-    const [ comunas, setComunas ] = useState([])
+export default function Comunas() {
+  console.log('Comunas')
+  const [ comunas, setComunas ] = useState([])
 	const [ ciudades, setCiudades ] = useState([])
 
     const rows = useSelector(selectComuna);
     const [ selectionModel, setSelectionModel ] = useState([])
 
-    const [ open, setOpen ] = useState(false);
+    const [ openModal, setOpenModal ] = useState(false)
     const [ elementModel, setElementModel ] = useState()
+
+    const [ openDialog, setOpenDialog ] = useState(false)
+    const [ titleDialog, setTitleDialog ] = useState()
+    const [ contentDialog, setContentDialog ] = useState()
 	
     const dispatch = useDispatch();
 	    
@@ -41,7 +45,7 @@ export default function FiltroComuna() {
         dispatch(search())    
 	}, [])
 
-    const handleSelection = (selection) => {
+  const handleSelection = (selection) => {
 		if (selection.length > 1) {
 			const selectionSet = new Set(selectionModel)
 			const result = selection.filter((s) => !selectionSet.has(s))
@@ -50,6 +54,25 @@ export default function FiltroComuna() {
 			setSelectionModel(selection)
 		}
 	}
+
+    const handleDialog = () => {
+        const selected = rows.find((row) => row.id === selectionModel[ 0 ])
+        if (titleDialog === 'Modificar') {
+            setElementModel(
+                <ModifyComuna 
+                    comuna={ selected } 
+                    onClose={ () => setOpenModal(false) }
+                />
+            )
+            setOpenDialog(false)
+            setOpenModal(true)
+        }
+        if (titleDialog === 'Eliminar') {
+            dispatch(
+                removeStore(selected.code)
+            ).then(() => setOpenDialog(false))
+        }
+    }
 
     return (
         <>
@@ -101,31 +124,40 @@ export default function FiltroComuna() {
                     />
                 </div>
                 <button onClick={ () => {
-                    setElementModel(<NewComuna onClose={ () => setOpen(false) }/>)
-                    setOpen(true)
+                    setElementModel(<NewComuna onClose={ () => setOpenModal(false) }/>)
+                    setOpenModal(true)
                 } } >
                     Nueva Comuna
                 </button>
                 <button onClick={ () => {
-                    const selected = rows.find((row) => row.id === selectionModel[ 0 ])
-                    setElementModel(<ModifyComuna comuna={ selected } onClose={ () => setOpen(false) }/>)
-                    setOpen(true)
+                    setTitleDialog('Modificar')
+                    setContentDialog('¿Desea continuar?')
+                    setOpenDialog(true)
                 } } 
                 >
                     Modificar Comuna
                 </button>
                 <button
                     onClick={ () => {
-                        const selected = rows.find((row) => row.id === selectionModel[ 0 ])
-                        dispatch(removeStore(selected.code))
+                        setTitleDialog('Eliminar')
+                        setContentDialog('¿Desea continuar?')
+                        setOpenDialog(true)
                     } }
 				>
                     Eliminar
                 </button>
             </main>
-            <Modal open={ open } onClose={ () => setOpen(false) }>
+            <Modal open={ openModal } onClose={ () => setOpenModal(false) }>
                 {elementModel}
             </Modal>
+            <Dialog 
+                title={ titleDialog }
+                content={ contentDialog }
+                open={ openDialog } 
+                onClose={ () => setOpenDialog(false) }
+                handleDialog={ handleDialog }>
+
+            </Dialog>
         </>
   	);
 }

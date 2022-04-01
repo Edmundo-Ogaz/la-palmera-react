@@ -7,7 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import PropTypes from 'prop-types';
 
-import { getAll as ciudadGetAll } from '../../service/ciudad';
+import { getAll as ciudadGetAll } from '../../services/ciudadService';
 
 export default function NewComuna(props) {
 	console.log('NewComuna')
