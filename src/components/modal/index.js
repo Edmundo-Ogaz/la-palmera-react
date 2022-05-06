@@ -20,19 +20,18 @@ export default function BasicModal(props) {
     console.log('Modal')
 
   return (
-      <div>
-          <Modal
-                open={ props.open }
-                onClose={ props.onClose }
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-              <Box sx={ style }>
-                  
-                  {props.children} 
-              </Box>
-          </Modal>
-      </div>
+    <div>
+      <Modal
+				open={ props.open }
+				onClose={ props.onClose }
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+      >
+        <Box sx={ style }>
+          {props.children}
+        </Box>
+      </Modal>
+    </div>
   );
 }
 

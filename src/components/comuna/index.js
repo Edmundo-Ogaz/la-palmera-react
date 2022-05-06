@@ -27,19 +27,20 @@ export default function Comunas() {
   const [ comunas, setComunas ] = useState([])
 	const [ ciudades, setCiudades ] = useState([])
 
-    const rows = useSelector(selectComuna);
-    const [ selectionModel, setSelectionModel ] = useState([])
+	const rows = useSelector(selectComuna);
+	const [ selectionModel, setSelectionModel ] = useState([])
 
-    const [ openModal, setOpenModal ] = useState(false)
-    const [ elementModel, setElementModel ] = useState()
+	const [ openModal, setOpenModal ] = useState(false)
+	const [ elementModel, setElementModel ] = useState()
 
-    const [ openDialog, setOpenDialog ] = useState(false)
-    const [ titleDialog, setTitleDialog ] = useState()
-    const [ contentDialog, setContentDialog ] = useState()
-	
-    const dispatch = useDispatch();
+	const [ openDialog, setOpenDialog ] = useState(false)
+	const [ titleDialog, setTitleDialog ] = useState('')
+	const [ contentDialog ] = useState('¿Desea continuar?')
+	const [ agreeDialog, setAgreeDialog ] = useState(() => {})
+
+	const dispatch = useDispatch();
 	    
-    useEffect(() => {
+  useEffect(() => {
 		comunaGetAll().then(response => setComunas(response.data));
 		ciudadGetAll().then(response => setCiudades(response.data));
         dispatch(search())    
@@ -55,109 +56,119 @@ export default function Comunas() {
 		}
 	}
 
-    const handleDialog = () => {
-        const selected = rows.find((row) => row.id === selectionModel[ 0 ])
-        if (titleDialog === 'Modificar') {
-            setElementModel(
-                <ModifyComuna 
-                    comuna={ selected } 
-                    onClose={ () => setOpenModal(false) }
-                />
-            )
-            setOpenDialog(false)
-            setOpenModal(true)
-        }
-        if (titleDialog === 'Eliminar') {
-            dispatch(
-                removeStore(selected.code)
-            ).then(() => setOpenDialog(false))
-        }
-    }
-
-    return (
-        <>
-            <main style={ { width: '100%' } }>
-                <h2>Filtro Comuna</h2>
-                <Formik 
-                    initialValues={ { comuna: '', ciudad: '' } }
-                    validate={ values => {
-                        const errors = {};
-                        return errors;
-                    } }
-                    onSubmit={ (values, { setSubmitting }) => {
-                        dispatch(search(values.comuna, values.ciudad))
-                    } }
-                >
-                    {({ isSubmitting }) => (
-                        <Form>
-                            <Field as="select" name="comuna">
-                                <option value="">TODOS</option>
-                                {comunas.map(comuna =>
-                                    <option key={ comuna.codigo } value={ comuna.codigo }>{comuna.nombre}</option>
-							)}
-                            </Field>
-                            <ErrorMessage name="comuna" component="div" />
-                            <Field as="select" name="ciudad">
-                                <option value="">TODOS</option>
-                                {ciudades.map(ciudad =>
-                                    <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
-							)}
-                            </Field>
-                            <ErrorMessage name="ciudad" component="div" />
-                            <button type="submit" disabled={ isSubmitting }>
-                                Submit
-                            </button>
-                        </Form>
-				    )}
-                </Formik>
-                <div style={ { height: 400, width: '100%' } }>
-                    <DataGrid
-                        rows={ rows }
-                        columns={ columns }
-                        pageSize={ 5 }
-                        rowsPerPageOptions={ [ 5 ] }
-                        checkboxSelection
-                        disableSelectionOnClick
-                        hideFooterSelectedRowCount
-                        onSelectionModelChange={ handleSelection }
-                        selectionModel={ selectionModel }
-                    />
-                </div>
-                <button onClick={ () => {
-                    setElementModel(<NewComuna onClose={ () => setOpenModal(false) }/>)
-                    setOpenModal(true)
-                } } >
-                    Nueva Comuna
-                </button>
-                <button onClick={ () => {
-                    setTitleDialog('Modificar')
-                    setContentDialog('¿Desea continuar?')
-                    setOpenDialog(true)
-                } } 
-                >
-                    Modificar Comuna
-                </button>
-                <button
-                    onClick={ () => {
-                        setTitleDialog('Eliminar')
-                        setContentDialog('¿Desea continuar?')
-                        setOpenDialog(true)
-                    } }
-				>
-                    Eliminar
-                </button>
-            </main>
-            <Modal open={ openModal } onClose={ () => setOpenModal(false) }>
-                {elementModel}
-            </Modal>
-            <Dialog 
-                title={ titleDialog }
-                content={ contentDialog }
-                open={ openDialog } 
-                onClose={ () => setOpenDialog(false) }
-                handleDialog={ handleDialog }>
-
-            </Dialog>
-        </>
-  	);
+	return (
+  <>
+    <main style={ { width: '100%' } }>
+      <h2>Filtro Comuna</h2>
+      <Formik
+				initialValues={ { comuna: '', ciudad: '' } }
+				validate={ values => {
+						const errors = {};
+						return errors;
+				} }
+				onSubmit={ (values, { setSubmitting }) => {
+						dispatch(search(values.comuna, values.ciudad))
+				} }
+			>
+        {({ isSubmitting }) => (
+          <Form>
+            <Field as="select" name="comuna">
+              <option value="">TODOS</option>
+              {comunas.map(comuna =>
+                <option key={ comuna.codigo } value={ comuna.codigo }>{comuna.nombre}</option>
+						)}
+            </Field>
+            <ErrorMessage name="comuna" component="div" />
+            <Field as="select" name="ciudad">
+              <option value="">TODOS</option>
+              {ciudades.map(ciudad =>
+                <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
+						)}
+            </Field>
+            <ErrorMessage name="ciudad" component="div" />
+            <button type="submit" disabled={ isSubmitting }>
+              Submit
+            </button>
+          </Form>
+				)}
+      </Formik>
+      <div style={ { height: 400, width: '100%' } }>
+        <DataGrid
+					rows={ rows }
+					columns={ columns }
+					pageSize={ 5 }
+					rowsPerPageOptions={ [ 5 ] }
+					checkboxSelection
+					disableSelectionOnClick
+					hideFooterSelectedRowCount
+					onSelectionModelChange={ handleSelection }
+					selectionModel={ selectionModel }
+				/>
+      </div>
+      <button onClick={ () => {
+				setTitleDialog('Nuevo')
+				setAgreeDialog(() => () => {
+					setElementModel(
+  					<NewComuna
+							onClose={ () => setOpenModal(false) }
+						/>
+					)
+					setOpenDialog(false)
+					setOpenModal(true)
+				} )
+				setOpenDialog(true)
+      } }
+			>
+        Nueva Comuna
+      </button>
+      <button
+				onClick={ () => {
+					setTitleDialog('Modificar')
+					setAgreeDialog(() => () => {
+						const selected = rows.find((row) => row.id === selectionModel[ 0 ])
+						setElementModel(
+  						<ModifyComuna
+								comuna={ selected }
+								onClose={ () => setOpenModal(false) }
+							/>
+						)
+						setOpenDialog(false)
+						setOpenModal(true)
+					} )
+										setOpenDialog(true)
+				} }
+			>
+        Modificar Comuna
+      </button>
+      <button
+				onClick={ () => {
+					setTitleDialog('Eliminar')
+					setAgreeDialog(() => () => {
+						const selected = rows.find((row) => row.id === selectionModel[ 0 ])
+						dispatch(
+								removeStore(selected.code)
+						).then(() => setOpenDialog(false))
+					} )
+					setOpenDialog(true)
+				} }
+			>
+        Eliminar
+      </button>
+    </main>
+    <Modal
+			open={ openModal }
+			onClose={ () => setOpenModal(false) }
+		>
+      {elementModel}
+    </Modal>
+    <Dialog
+			title={ titleDialog }
+			content={ contentDialog }
+			open={ openDialog }
+			onClose={ () => setOpenDialog(false) }
+			agree={ agreeDialog }
+		>
+    </Dialog>
+  </>
+	);
 }

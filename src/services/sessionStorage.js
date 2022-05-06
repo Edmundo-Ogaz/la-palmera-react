@@ -1,23 +1,30 @@
-// return the user data from the session storage
+export const getSession = () => {
+  const session = JSON.parse(sessionStorage.getItem('session') || null)
+  return session || null
+}
+
 export const getUser = () => {
-  const userStr = sessionStorage.getItem('user');
-  if (userStr) return JSON.parse(userStr);
+  const session = JSON.parse(sessionStorage.getItem('session') || null)
+  if (session) return session.user || null
   else return null;
 }
 
-// return the token from the session storage
 export const getToken = () => {
-  return sessionStorage.getItem('token') || null;
+  const session = JSON.parse(sessionStorage.getItem('session') || null)
+  if (session) return session.token || null
+  else return null
 }
 
-// remove the token and user from the session storage
-export const removeUserSession = () => {
-  sessionStorage.removeItem('token');
-  sessionStorage.removeItem('user');
+export const getEspiration = () => {
+  const session = JSON.parse(sessionStorage.getItem('session') || null)
+  if (session) return session.expiration || null
+  else return null
 }
 
-// set the token and user from the session storage
-export const setUserSession = (token, user) => {
-  sessionStorage.setItem('token', token);
-  sessionStorage.setItem('user', JSON.stringify(user));
+export const removeSession = () => {
+  sessionStorage.removeItem('session');
+}
+
+export const setUserSession = (token, user, expiration) => {
+  sessionStorage.setItem('session', JSON.stringify({ token, user: JSON.stringify(user), expiration }))
 }

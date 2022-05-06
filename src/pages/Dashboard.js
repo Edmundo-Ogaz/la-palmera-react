@@ -5,16 +5,15 @@ import PropTypes from 'prop-types';
 export default function Dashboard( props ) {
 	console.log('Dashboard')
   	return (
-      <div>
-          <h1>La Palmera</h1>
-          <Menu
+    <div>
+      <h1>La Palmera</h1>
+      <Menu
 			mode="horizontal"
-			// use openTransition for antd
 			openAnimation="slide-up"
 			onLogOut={ props.onLogOut }
 			/>
-          <Outlet />
-      </div>
+      <Outlet />
+    </div>
   	);
 }
 

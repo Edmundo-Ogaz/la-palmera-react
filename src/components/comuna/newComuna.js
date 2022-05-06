@@ -22,62 +22,62 @@ export default function NewComuna(props) {
 
 	const customChange = (e, setFieldValue) => {
 		setFieldValue(e.target.name, e.target.value);
-	  };
+	};
 
 	return (
-    <main style={ { padding: '1rem' } }>
-        <h2>Nueva Comuna</h2>
-        <Formik
-				initialValues={ { code: '', name: '', city: '' } }
-				validate={ values => {
-					const errors = {};
-					if (!values.code) {
-						errors.code = 'Required';
-					}
-					if (!values.name) {
-						errors.name = 'Required';
-					}
-					if (!values.cityCode) {
-						errors.cityCode = 'Required';
-					}
-					return errors;
-				} }
-				onSubmit={ (values, { setSubmitting }) => {
-					dispatch(
-						saveComuna(values.code, values.name, values.cityCode)
-					)
-					.then(() => props.onClose())
-				} }
-			>
-            {({ setFieldValue, isSubmitting }) => (
-                <Form>
-                    <Field
+  <main style={ { padding: '1rem' } }>
+    <h2>Nueva Comuna</h2>
+    <Formik
+			initialValues={ { code: '', name: '', city: '' } }
+			validate={ values => {
+				const errors = {};
+				if (!values.code) {
+					errors.code = 'Required';
+				}
+				if (!values.name) {
+					errors.name = 'Required';
+				}
+				if (!values.cityCode) {
+					errors.cityCode = 'Required';
+				}
+				return errors;
+			} }
+			onSubmit={ (values, { setSubmitting }) => {
+				dispatch(
+					saveComuna(values.code, values.name, values.cityCode)
+				)
+				.then(() => props.onClose())
+			} }
+		>
+      {({ setFieldValue, isSubmitting }) => (
+        <Form>
+          <Field
 						type="code"
 						name="code"
 						placeholder="Código"
 						onChange={ e => customChange(e, setFieldValue) }
-						/>
-                    <Field
+					/>
+          <Field
 						type="name"
 						name="name"
 						placeholder="Nombre"
 						onChange={ e => customChange(e, setFieldValue) }
 					/>
-                    <ErrorMessage name="name" component="div" />
-                    <Field as="select" name="cityCode">
-                        <option value="">TODOS</option>
-                        {ciudades.map(ciudad =>
-                            <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
+          <ErrorMessage name="name" component="div" />
+          <Field as="select" name="cityCode">
+            <option value="">TODOS</option>
+            {ciudades.map(ciudad =>
+              <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
 							)}
-                    </Field>
-                    <ErrorMessage name="cityCode" component="div" />
-                    <button type="submit" disabled={ isSubmitting }>
-                        Submit
-                    </button>
-                </Form>
+          </Field>
+          <ErrorMessage name="cityCode" component="div" />
+          <button type="submit" disabled={ isSubmitting }>
+            Submit
+          </button>
+        </Form>
 				)}
-        </Formik>
-    </main>
+    </Formik>
+  </main>
 	);
 }
 

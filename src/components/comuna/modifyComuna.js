@@ -25,10 +25,10 @@ export default function ModifyComuna(props) {
 		setFieldValue(e.target.name, e.target.value);
 	};
 
-  	return (
-      	<main style={ { padding: '1rem' } }>
-          <h2>Modificar Comuna</h2>
-          	<Formik
+	return (
+  <main style={ { padding: '1rem' } }>
+    <h2>Modificar Comuna</h2>
+    <Formik
 				initialValues={ { code: comuna.code, name: comuna.name, codeCity: comuna.codeCity } }
 				validate={ values => {
 					const errors = {};
@@ -51,37 +51,37 @@ export default function ModifyComuna(props) {
 				onChange={ (values, actions) => {
 					console.log('On Change');
 				} }
-				>
-              	{({ values, handleChange, handleSubmit, setFieldValue, isSubmitting }) => (
-                  <Form>
-                      <Field
-					  		type="code"
+			>
+      {({ values, handleChange, handleSubmit, setFieldValue, isSubmitting }) => (
+        <Form>
+          <Field
+							type="code"
 							name="code"
 							placeholder="Código"
 							onChange={ e => customChange(e, setFieldValue) }
 							disabled={ true }
 						/>
-                      <ErrorMessage name="code" component="div" />
-                      <Field
+          <ErrorMessage name="code" component="div" />
+          <Field
 							type="name"
 							name="name"
 							placeholder="Nombre"
 							onChange={ e => customChange(e, setFieldValue) }
-					  />
-                      <ErrorMessage name="name" component="div" />
-                      <Field as="select" name="codeCity">
-                          <option value="">TODOS</option>
-                          {ciudades.map(ciudad =>
-                              <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
+						/>
+          <ErrorMessage name="name" component="div" />
+          <Field as="select" name="codeCity">
+            <option value="">TODOS</option>
+            {ciudades.map(ciudad =>
+              <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
 							)}
-                      </Field>
-                      <ErrorMessage name="codeCity" component="div" />
-                      <button type="submit">Submit</button>
-                  </Form>
-        		)}
-          	</Formik>
-      	</main>
-  	);
+          </Field>
+          <ErrorMessage name="codeCity" component="div" />
+          <button type="submit">Submit</button>
+        </Form>
+				)}
+    </Formik>
+  </main>
+	);
 }
 
 ModifyComuna.propTypes = {

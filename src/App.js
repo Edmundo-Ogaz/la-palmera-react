@@ -6,7 +6,7 @@ import Login from './pages/login/Login';
 import PrivateRoute from './utils/PrivateRoute';
 import PublicRoute from './utils/PublicRoute';
 
-import { getToken, removeUserSession, setUserSession } from './services/sessionStorage';
+import { getToken, getEspiration } from './services/sessionStorage';
 
 import Comunas from './components/comuna';
 
@@ -21,18 +21,23 @@ export default function App( props ) {
 	const [ authLoading, setAuthLoading ] = useState(true);
 
 	useEffect(() => {
-		const token = getToken();
-		if (!token) {
+		const token = getToken()
+		const expiration = getEspiration()
+		if (!token || !expiration)
 			return;
-		}
 
 		verifyToken(token)
-		.then(response => {
-			setUserSession(response.token, response.user);
-			setAuthLoading(false);
+		.then(() => {
+			const DIF = Math.abs ( new Date(expiration).getTime() - new Date().getTime() )
+			console.log(DIF)
+			setTimeout(() => {
+				window.location = '/login';
+			}, DIF)
+			setAuthLoading(false)
 		}).catch(error => {
-			removeUserSession();
+			console.error(error)
 			setAuthLoading(false);
+			window.location = '/login';
 		});
 	}, []);
 
@@ -41,23 +46,25 @@ export default function App( props ) {
 	}
 
   	return (
-      <Provider store={ store }>
-          <BrowserRouter>
-              <Routes>
-                  <Route exact path="/login" element={ <PublicRoute /> } >
-                      <Route index element={ <Login /> } />
-                  </Route>
-                  <Route path="/" element={ <PrivateRoute /> } >
-                      <Route path="comunas" element={ <Comunas /> } />
-                  </Route>
-                  <Route path="*"	element={ 
-                      <main style={ { padding: '1rem' } }>
-                          <p>There's nothing here!</p>
-                      </main>
-					}
-					/>
-              </Routes>
-          </BrowserRouter>
-      </Provider>
+    <Provider store={ store }>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/login" element={ <PublicRoute /> } >
+            <Route index element={ <Login /> } />
+          </Route>
+          <Route path="/" element={ <PrivateRoute /> } >
+            <Route path="comunas" element={ <Comunas /> } />
+          </Route>
+          <Route
+            path="*"
+            element={
+              <main style={ { padding: '1rem' } }>
+                <p>There's nothing here!</p>
+              </main>
+            }
+		      />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   	);
 }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import { setUserSession } from '../../services/sessionStorage';
 import PropTypes from 'prop-types';
 import { signin } from '../../services/signinService'
 
@@ -24,29 +23,28 @@ export default function Login(props) {
 		signin( username, password )
 			.then(response => {
 				setLoading(false);
-				setUserSession(response.data.token, response.data.user);
-					navigate('/');
+				window.location = '/';
 			})
 			.catch(err => {
 				setLoading(false);
       if (error.response.status === 401) setError(error.response.data.message);
-      else setError('Something went wrong. Please try again later.');
-    });
+		else setError('Something went wrong. Please try again later.');
+		});
 	};
 
-    return (
-        <div className="login-container">
-            <div className="title">
-                Login
-            </div>
-            <FluidInput type="text" label="name" id="name" style={ style } onChange={ setUsername } />
-            <FluidInput type="password" label="password" id="password" style={ style } onChange={ setPassword } />
-            {error && <><small style={ { color: 'red' } }>{error}</small><br /></>}<br />
-            <div className={ 'button login-button' } onClick={ handleLogin } disabled={ loading }>
-                {loading ? 'Loading...' : 'Log in'}
-            </div>
-        </div>
-    );
+	return (
+  <div className="login-container">
+    <div className="title">
+      Login
+    </div>
+    <FluidInput type="text" label="name" id="name" style={ style } onChange={ setUsername } />
+    <FluidInput type="password" label="password" id="password" style={ style } onChange={ setPassword } />
+    {error && <><small style={ { color: 'red' } }>{error}</small><br /></>}<br />
+    <div className={ 'button login-button' } onClick={ handleLogin } disabled={ loading }>
+      {loading ? 'Loading...' : 'Log in'}
+    </div>
+  </div>
+	);
 }
 
 function FluidInput(props) {
@@ -56,7 +54,6 @@ function FluidInput(props) {
     const [ value, setValue ] = React.useState('');
 
 	function focusField() {
-		// console.log(`focusField ${focused}`);
 		setFocused(!focused);
 	}
 
@@ -73,9 +70,9 @@ function FluidInput(props) {
 		inputClass += ' fluid-input--open';
 	}
     return (
-        <div className={ inputClass } style={ style }>
-            <div className="fluid-input-holder">
-                <input
+      <div className={ inputClass } style={ style }>
+        <div className="fluid-input-holder">
+          <input
 					className="fluid-input-input"
 					type={ type }
 					id={ id }
@@ -84,9 +81,9 @@ function FluidInput(props) {
 					onChange={ handleChange.bind(this) }
 					autoComplete="off"
 					/>
-                <label className="fluid-input-label" forhtml={ id }>{label}</label>
-            </div>
+          <label className="fluid-input-label" forhtml={ id }>{label}</label>
         </div>
+      </div>
     );
 }
 

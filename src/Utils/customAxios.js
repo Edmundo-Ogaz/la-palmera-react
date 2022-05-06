@@ -10,7 +10,6 @@ import { verifyToken } from '../services/tokenService'
 const customAxios = axios.create({
     baseURL: 'http://localhost:8081',
     timeout: 10000,
-    headers: { 'api-key': 'eyJz-CI6Ikp-4pWY-lhdCI6' }
 });
 
 // Step-2: Create request, response & error handlers
@@ -19,8 +18,11 @@ const requestHandler = async request => {
     const token = getToken()
     try {
         const response = await verifyToken(token)
-        request.headers.Authorization = `Bearer ${response.token} `
-        return request;
+        if (response) {
+            request.headers.Authorization = `Bearer ${token} `
+            return request;
+        }
+        throw new Error('VALIDATION_TOKEN_ERROR')
     } catch(err) { 
         throw err 
     }
