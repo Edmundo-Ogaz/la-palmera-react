@@ -3,14 +3,14 @@ import { comunasAdapter, comunaAdapter, comunaAdapterToApi } from '../model/comu
 
 export const getAll = () => {
   return axios
-    .get('/comunas'
+    .get(`${process.env.REACT_APP_ENDPOINT_COMUNAS_GET_ALL}`
     )
 };
 
 export const search = async (comuna = '', ciudad = '') => {
 	try {
 		const response = await axios.get(
-			`/comunas/search?comuna=${comuna}&ciudad=${ciudad}`)
+			`${process.env.REACT_APP_ENDPOINT_COMUNAS_SEARCH}?comuna=${comuna}&ciudad=${ciudad}`)
 		return comunasAdapter(response.data)
 	} catch (error) {
 		throw error
@@ -20,7 +20,7 @@ export const search = async (comuna = '', ciudad = '') => {
 export const save = async (code = '', name = '', codeCity = '') => {
 	console.log(`saveSync ${code} ${name} ${codeCity}`);
 	try {
-	  	const response = await axios.post('/comunas', 
+	  	const response = await axios.post(`${process.env.REACT_APP_ENDPOINT_COMUNAS_POST_SAVE}`, 
 		  comunaAdapterToApi({ code, name, codeCity }))
 	  	return comunaAdapter(response.data)
 	} catch (error) {
@@ -32,7 +32,7 @@ export const save = async (code = '', name = '', codeCity = '') => {
 export const update = async (code = '', name = '', codeCity = '') => {
 	console.log('update service')
 	try {
-		const response = await axios.put('/comunas', 
+		const response = await axios.put(`${process.env.REACT_APP_ENDPOINT_COMUNAS_PUT_UPDATE}`, 
 			comunaAdapterToApi({ code, name, codeCity }))
 		return comunaAdapter(response.data)
 	} catch (error) {
@@ -44,5 +44,5 @@ export const update = async (code = '', name = '', codeCity = '') => {
 export const remove = (code) => {
 	console.log(`remove code ${code}`)
 	return axios
-	  .delete(`/comunas/${code}`)
+	  .delete(`${process.env.REACT_APP_ENDPOINT_COMUNAS_DELETE_BY_ID}${code}`)
 };

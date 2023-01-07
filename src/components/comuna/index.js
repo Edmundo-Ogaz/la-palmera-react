@@ -14,7 +14,7 @@ import NewComuna from './newComuna'
 import ModifyComuna from './modifyComuna'
 
 import { getAll as comunaGetAll } from '../../services/comunaService';
-import { getAll as ciudadGetAll } from '../../services/ciudadService';
+import { getAll as cityGetAll } from '../../services/cityService';
 
 const columns = [
 	{ field: 'code', headerName: 'Código', width: 130 },
@@ -42,7 +42,7 @@ export default function Comunas() {
 	    
   useEffect(() => {
 		comunaGetAll().then(response => setComunas(response.data));
-		ciudadGetAll().then(response => setCiudades(response.data));
+		cityGetAll().then(response => setCiudades(response.data));
         dispatch(search())    
 	}, [])
 

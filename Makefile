@@ -1,6 +1,7 @@
 run:
 	npm start
-
+run-dev:
+	npm start
 lint:
 	./node_modules/eslint/bin/eslint.js $(filter-out $@,$(MAKECMDGOALS))
 

@@ -9,43 +9,44 @@ import PublicRoute from './utils/PublicRoute';
 import { getToken, getEspiration } from './services/sessionStorage';
 
 import Comunas from './components/comuna';
+import Cities from './components/city';
 
 import { verifyToken } from './services/tokenService'
 
 import { Provider } from 'react-redux';
 import { store } from './store';
 
-export default function App( props ) {
-	console.log('App')
+export default function App(props) {
+  console.log('App')
 
-	const [ authLoading, setAuthLoading ] = useState(true);
+  const [ authLoading, setAuthLoading ] = useState(true);
 
-	useEffect(() => {
-		const token = getToken()
-		const expiration = getEspiration()
-		if (!token || !expiration)
-			return;
+  useEffect(() => {
+    const token = getToken()
+    const expiration = getEspiration()
+    if (!token || !expiration)
+      return;
 
-		verifyToken(token)
-		.then(() => {
-			const DIF = Math.abs ( new Date(expiration).getTime() - new Date().getTime() )
-			console.log(DIF)
-			setTimeout(() => {
-				window.location = '/login';
-			}, DIF)
-			setAuthLoading(false)
-		}).catch(error => {
-			console.error(error)
-			setAuthLoading(false);
-			window.location = '/login';
-		});
-	}, []);
+    verifyToken(token)
+      .then(() => {
+        const DIF = Math.abs(new Date(expiration).getTime() - new Date().getTime())
+        console.log(DIF)
+        setTimeout(() => {
+          window.location = '/login';
+        }, DIF)
+        setAuthLoading(false)
+      }).catch(error => {
+        console.error(error)
+        setAuthLoading(false);
+        window.location = '/login';
+      });
+  }, []);
 
-	if (authLoading && getToken()) {
-		return <div className="content">Checking Authentication...</div>
-	}
+  if (authLoading && getToken()) {
+    return <div className="content">Checking Authentication...</div>
+  }
 
-  	return (
+  return (
     <Provider store={ store }>
       <BrowserRouter>
         <Routes>
@@ -54,6 +55,7 @@ export default function App( props ) {
           </Route>
           <Route path="/" element={ <PrivateRoute /> } >
             <Route path="comunas" element={ <Comunas /> } />
+            <Route path="cities" element={ <Cities /> } />
           </Route>
           <Route
             path="*"
@@ -62,9 +64,9 @@ export default function App( props ) {
                 <p>There's nothing here!</p>
               </main>
             }
-		      />
+          />
         </Routes>
       </BrowserRouter>
     </Provider>
-  	);
+  );
 }

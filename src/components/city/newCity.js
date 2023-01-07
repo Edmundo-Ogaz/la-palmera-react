@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { save as saveComuna } from '../../store/comunaReducer'
+import { save as saveComuna } from '../../store/cityReducer'
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import PropTypes from 'prop-types';
 
-import { getAll as cityGetAll } from '../../services/cityService';
+import { getAll as regionGetAll } from '../../services/regionService';
 
-export default function NewComuna(props) {
-	console.log('NewComuna')
+export default function NewCity(props) {
+	console.log('NewCity')
 	
-	const [ ciudades, setCiudades ] = useState([])
+	const [ regions, setRegions ] = useState([])
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		cityGetAll().then(response => setCiudades(response.data));
+		regionGetAll().then(response => setRegions(response.data));
 	}, [])
 
 	const customChange = (e, setFieldValue) => {
@@ -26,9 +26,9 @@ export default function NewComuna(props) {
 
 	return (
   <main style={ { padding: '1rem' } }>
-    <h2>Nueva Comuna</h2>
+    <h2>Nueva Ciudad</h2>
     <Formik
-			initialValues={ { code: '', name: '', city: '' } }
+			initialValues={ { code: '', name: '', region: '' } }
 			validate={ values => {
 				const errors = {};
 				if (!values.code) {
@@ -37,14 +37,14 @@ export default function NewComuna(props) {
 				if (!values.name) {
 					errors.name = 'Required';
 				}
-				if (!values.cityCode) {
-					errors.cityCode = 'Required';
+				if (!values.regionCode) {
+					errors.regionCode = 'Required';
 				}
 				return errors;
 			} }
 			onSubmit={ (values, { setSubmitting }) => {
 				dispatch(
-					saveComuna(values.code, values.name, values.cityCode)
+					saveComuna(values.code, values.name, values.regionCode)
 				)
 				.then(() => props.onClose())
 			} }
@@ -64,10 +64,10 @@ export default function NewComuna(props) {
 						onChange={ e => customChange(e, setFieldValue) }
 					/>
           <ErrorMessage name="name" component="div" />
-          <Field as="select" name="cityCode">
+          <Field as="select" name="regionCode">
             <option value="">TODOS</option>
-            {ciudades.map(ciudad =>
-              <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
+            {regions.map(region =>
+              <option key={ region.codigo } value={ region.codigo }>{region.nombre}</option>
 							)}
           </Field>
           <ErrorMessage name="cityCode" component="div" />
@@ -81,6 +81,6 @@ export default function NewComuna(props) {
 	);
 }
 
-NewComuna.propTypes = {
+NewCity.propTypes = {
 	onClose: PropTypes.func
 }

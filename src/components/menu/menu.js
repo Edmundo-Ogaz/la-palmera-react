@@ -22,6 +22,9 @@ export default function App( props ) {
       case '1-1':
         navigate('/comunas')
         break;
+      case '1-2':
+        navigate('/cities')
+        break;
       case '4-2':
         removeSession()
         navigate('/login')

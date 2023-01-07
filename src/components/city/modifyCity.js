@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux'
-import { modify as modifyStore } from '../../store/comunaReducer'
+import { modify as modifyStore } from '../../store/cityReducer'
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import PropTypes from 'prop-types';
 
-import { getAll as cityGetAll } from '../../services/cityService';
+import { getAll as regionGetAll } from '../../services/regionService';
 
-export default function ModifyComuna(props) {
-	console.log('ModifyComuna')
+export default function ModifyCity(props) {
+	console.log('ModifyCity')
 
-	const { comuna } = props
-	const [ ciudades, setCiudades ] = useState([])
+	const { city } = props
+	const [ regions, setRegions ] = useState([])
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		cityGetAll().then(response => setCiudades(response.data));
+		regionGetAll().then(response => setRegions(response.data));
 	}, [])
 
 	const customChange = (e, setFieldValue) => {
@@ -27,9 +27,9 @@ export default function ModifyComuna(props) {
 
 	return (
   <main style={ { padding: '1rem' } }>
-    <h2>Modificar Comuna</h2>
+    <h2>Modificar Ciudad</h2>
     <Formik
-				initialValues={ { code: comuna.code, name: comuna.name, codeCity: comuna.codeCity } }
+				initialValues={ { code: city.code, name: city.name, codeCity: city.codeRegion } }
 				validate={ values => {
 					const errors = {};
 					if (!values.code) {
@@ -38,14 +38,14 @@ export default function ModifyComuna(props) {
 					if (!values.name) {
 						errors.name = 'Required';
 					}
-					if (!values.codeCity) {
-						errors.codeCity = 'Required';
+					if (!values.codeRegion) {
+						errors.codeRegion = 'Required';
 					}
 					return errors;
 				} }
 				onSubmit={ (values, actions) => {
 					dispatch(
-						modifyStore(values.code, values.name, values.codeCity)
+						modifyStore(values.code, values.name, values.codeRegion)
 					).then(() => props.onClose())
 				} }
 				onChange={ (values, actions) => {
@@ -69,10 +69,10 @@ export default function ModifyComuna(props) {
 							onChange={ e => customChange(e, setFieldValue) }
 						/>
           <ErrorMessage name="name" component="div" />
-          <Field as="select" name="codeCity">
+          <Field as="select" name="codeRegion">
             <option value="">TODOS</option>
-            {ciudades.map(ciudad =>
-              <option key={ ciudad.codigo } value={ ciudad.codigo }>{ciudad.nombre}</option>
+            {regions.map(region =>
+              <option key={ region.codigo } value={ region.codigo }>{region.nombre}</option>
 							)}
           </Field>
           <ErrorMessage name="codeCity" component="div" />
@@ -84,7 +84,7 @@ export default function ModifyComuna(props) {
 	);
 }
 
-ModifyComuna.propTypes = {
-	comuna: PropTypes.object,
+ModifyCity.propTypes = {
+	city: PropTypes.object,
 	onClose: PropTypes.func
 }

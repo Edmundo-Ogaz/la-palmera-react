@@ -7,7 +7,7 @@ export function comunasAdapter(comunas) {
 			id: index,
 			code: comuna.codigo,
 			name: comuna.nombre,
-			codeCity: comuna.codigociudad,
+			codeCity: comuna.codigoCiudad,
 			
 		})
 	);
@@ -20,7 +20,7 @@ export function comunaAdapter(comuna) {
 	return {
 		code: comuna.codigo,
 		name: comuna.nombre,
-		codeCity: comuna.codigociudad,
+		codeCity: comuna.codigoCiudad,
 	}
 }
 
@@ -29,8 +29,8 @@ export function comunaAdapterToApi(comuna) {
 		return {};
 
 	return {
-		code: comuna.code,
-		name: comuna.name,
-		cityCode: comuna.codeCity,
+		codigo: comuna.code,
+		nombre: comuna.name,
+		codigoCiudad: comuna.codeCity,
 	}
 }
