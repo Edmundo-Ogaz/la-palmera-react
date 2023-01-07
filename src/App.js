@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Login from './pages/login/Login';
 
-import PrivateRoute from './utils/PrivateRoute';
+import PrivateRoute from './utils/PrivateRoute.js';
 import PublicRoute from './utils/PublicRoute';
 
 import { getToken, getEspiration } from './services/sessionStorage';
